@@ -26,13 +26,6 @@ class Boundary {
   }
 }
 
-const testBoundary = new Boundary({
-  position: {
-    x: 400,
-    y: 400,
-  },
-});
-
 const boundaries = [];
 collisionsMap.forEach((row, i) => {
   row.forEach((symbol, j) => {
@@ -79,6 +72,9 @@ class Sprite {
 const bg = new Image();
 bg.src = "./img/map400.png";
 
+const fg = new Image();
+fg.src = "./img/myForeground.png";
+
 // console.log(bg.width);
 
 const background = new Sprite({
@@ -87,6 +83,14 @@ const background = new Sprite({
     y: offset.y,
   },
   image: bg,
+});
+
+const foreground = new Sprite({
+  position: {
+    x: offset.x,
+    y: offset.y,
+  },
+  image: fg,
 });
 
 const playerImage = new Image();
@@ -114,7 +118,7 @@ const player = new Sprite({
 // (canvas.height - this.image.height) / 2,
 
 let moving = true;
-const movables = [background, ...boundaries];
+const movables = [background, foreground, ...boundaries];
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
@@ -161,6 +165,7 @@ function animate() {
     boundary.draw();
   });
   player.draw();
+  foreground.draw();
 
   if (keys.w.pressed && lastKey === "w") {
     handleCollision({
