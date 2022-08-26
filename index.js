@@ -1,31 +1,3 @@
-const canvas = document.querySelector("canvas");
-const c = canvas.getContext("2d");
-
-canvas.width = 1024;
-canvas.height = 576;
-
-c.fillStyle = "white";
-c.fillRect(0, 0, canvas.width, canvas.height);
-
-const offset = {
-  x: -1000,
-  y: -550,
-};
-
-class Boundary {
-  static height = 48;
-  static width = 48;
-  constructor({ position }) {
-    this.position = position;
-    this.width = 48;
-    this.height = 48;
-  }
-  draw() {
-    c.fillStyle = "rgba(255,0,0,0.0)";
-    c.fillRect(this.position.x, this.position.y, this.width, this.height);
-  }
-}
-
 const boundaries = [];
 collisionsMap.forEach((row, i) => {
   row.forEach((symbol, j) => {
@@ -42,40 +14,21 @@ collisionsMap.forEach((row, i) => {
   });
 });
 
-// console.log(boundaries);
-
-class Sprite {
-  constructor({ position, velocity, image, frames = { max: 1 } }) {
-    this.position = position;
-    this.image = image;
-    this.frames = frames;
-    this.image.onload = () => {
-      this.width = this.image.width / this.frames.max;
-      this.height = this.image.height;
-    };
-  }
-
-  draw() {
-    c.drawImage(
-      this.image,
-      0,
-      0,
-      this.width,
-      this.height,
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
-    );
-  }
-}
-const bg = new Image();
-bg.src = "./img/map400.png";
-
-const fg = new Image();
-fg.src = "./img/myForeground.png";
-
-// console.log(bg.width);
+const tallGrass = [];
+battlezonesMap.forEach((row, i) => {
+  row.forEach((symbol, j) => {
+    if (symbol === 1025) {
+      tallGrass.push(
+        new Boundary({
+          position: {
+            x: j * Boundary.width + offset.x,
+            y: i * Boundary.height + offset.y,
+          },
+        })
+      );
+    }
+  });
+});
 
 const background = new Sprite({
   position: {
@@ -93,32 +46,33 @@ const foreground = new Sprite({
   image: fg,
 });
 
-const playerImage = new Image();
-playerImage.src = "./img/playerDown.png";
-
 const player = new Sprite({
   position: {
-    // x: (canvas.width - playerImage.width / 4) / 2,
-    // y: (canvas.height - playerImage.height) / 2,
     x: (canvas.width - playerImage.width / 4) / 2,
     y: (canvas.height - playerImage.height) / 2,
   },
   image: playerImage,
   frames: {
     max: 4,
+    current: 0,
+    elapsed: 0,
   },
 });
 
-// console.log(player);
-// console.log(player.image.width);
-// console.log(player.width);
-
-// console.log(background);
-// (canvas.width - this.image.width) / 2,
-// (canvas.height - this.image.height) / 2,
+console.log(player);
 
 let moving = true;
-const movables = [background, foreground, ...boundaries];
+const movables = [background, foreground, ...boundaries, ...tallGrass];
+
+const playerHitBox = new HitBox({
+  position: {
+    x: player.position.x,
+    y: player.position.y + 34,
+  },
+  width: 48,
+  height: 34,
+});
+console.log(playerHitBox);
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
@@ -139,7 +93,7 @@ function handleCollision({
     const boundary = boundaries[i];
     if (
       rectangularCollision({
-        rectangle1: player,
+        rectangle1: playerHitBox,
         rectangle2: {
           ...boundary,
           position: {
@@ -149,11 +103,29 @@ function handleCollision({
         },
       })
     ) {
-      console.log("colliding");
+      // console.log("colliding");
       moving = false;
       break;
     } else {
       moving = true;
+    }
+  }
+
+  for (let i = 0; i < tallGrass.length; i++) {
+    const grassPatch = tallGrass[i];
+    if (
+      rectangularCollision({
+        rectangle1: playerHitBox,
+        rectangle2: {
+          ...grassPatch,
+          position: {
+            x: grassPatch.position.x,
+            y: grassPatch.position.y,
+          },
+        },
+      })
+    ) {
+      console.log("Grass collision");
     }
   }
 }
@@ -164,10 +136,19 @@ function animate() {
   boundaries.forEach((boundary) => {
     boundary.draw();
   });
-  player.draw();
-  foreground.draw();
+  tallGrass.forEach((boundary) => {
+    boundary.draw();
+  });
 
+  playerHitBox.draw();
+  player.draw();
+
+  foreground.draw();
+  player.moving = false;
   if (keys.w.pressed && lastKey === "w") {
+    player.moving = true;
+    playerImage.src = "./img/playerUp.png";
+
     handleCollision({
       offset: {
         x: 0,
@@ -180,6 +161,9 @@ function animate() {
       });
     }
   } else if (keys.a.pressed && lastKey === "a") {
+    player.moving = true;
+    playerImage.src = "./img/playerLeft.png";
+
     handleCollision({
       offset: {
         x: 2,
@@ -192,6 +176,9 @@ function animate() {
       });
     }
   } else if (keys.s.pressed && lastKey === "s") {
+    player.moving = true;
+    playerImage.src = "./img/playerDown.png";
+
     handleCollision({
       offset: {
         x: 0,
@@ -204,12 +191,16 @@ function animate() {
       });
     }
   } else if (keys.d.pressed && lastKey === "d") {
+    player.moving = true;
+    playerImage.src = "./img/playerRight.png";
+
     handleCollision({
       offset: {
         x: -2,
         y: 0,
       },
     });
+
     if (moving) {
       movables.forEach((movable) => {
         movable.position.x -= 2;
