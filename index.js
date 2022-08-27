@@ -59,11 +59,6 @@ const player = new Sprite({
   },
 });
 
-console.log(player);
-
-let moving = true;
-const movables = [background, foreground, ...boundaries, ...tallGrass];
-
 const playerHitBox = new HitBox({
   position: {
     x: player.position.x,
@@ -72,66 +67,22 @@ const playerHitBox = new HitBox({
   width: 48,
   height: 34,
 });
-console.log(playerHitBox);
 
-function rectangularCollision({ rectangle1, rectangle2 }) {
-  return (
-    rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
-    rectangle1.position.y + rectangle1.height >= rectangle2.position.y &&
-    rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
-    rectangle1.position.y <= rectangle2.position.y + rectangle2.height
-  );
-}
+console.log(player);
 
-function handleCollision({
-  offset = {
-    x: 0,
-    y: 0,
-  },
-}) {
-  for (let i = 0; i < boundaries.length; i++) {
-    const boundary = boundaries[i];
-    if (
-      rectangularCollision({
-        rectangle1: playerHitBox,
-        rectangle2: {
-          ...boundary,
-          position: {
-            x: boundary.position.x + offset.x,
-            y: boundary.position.y + offset.y,
-          },
-        },
-      })
-    ) {
-      // console.log("colliding");
-      moving = false;
-      break;
-    } else {
-      moving = true;
-    }
-  }
+/*
+World Initialization complete.
+Animation code below
+*/
 
-  for (let i = 0; i < tallGrass.length; i++) {
-    const grassPatch = tallGrass[i];
-    if (
-      rectangularCollision({
-        rectangle1: playerHitBox,
-        rectangle2: {
-          ...grassPatch,
-          position: {
-            x: grassPatch.position.x,
-            y: grassPatch.position.y,
-          },
-        },
-      })
-    ) {
-      console.log("Grass collision");
-    }
-  }
-}
+const movables = [background, foreground, ...boundaries, ...tallGrass];
+const battle = {
+  initiated: false,
+};
 
 function animate() {
-  window.requestAnimationFrame(animate);
+  const animationId = window.requestAnimationFrame(animate);
+  console.log(animationId);
   background.draw();
   boundaries.forEach((boundary) => {
     boundary.draw();
@@ -139,12 +90,15 @@ function animate() {
   tallGrass.forEach((boundary) => {
     boundary.draw();
   });
-
   playerHitBox.draw();
   player.draw();
-
   foreground.draw();
+
+  let moving = true;
   player.moving = false;
+
+  if (battle.initiated) return;
+
   if (keys.w.pressed && lastKey === "w") {
     player.moving = true;
     playerImage.src = "./img/playerUp.png";
