@@ -55,7 +55,9 @@ function handleCollision({
       moving = true;
     }
   }
+}
 
+function handleGrass({ animationId }) {
   for (let i = 0; i < tallGrass.length; i++) {
     const grassPatch = tallGrass[i];
     if (

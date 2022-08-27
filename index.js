@@ -80,9 +80,11 @@ const battle = {
   initiated: false,
 };
 
+let moving = true;
+
 function animate() {
   const animationId = window.requestAnimationFrame(animate);
-  console.log(animationId);
+  // console.log(animationId);
   background.draw();
   boundaries.forEach((boundary) => {
     boundary.draw();
@@ -94,21 +96,19 @@ function animate() {
   player.draw();
   foreground.draw();
 
-  let moving = true;
   player.moving = false;
 
   if (battle.initiated) return;
+
+  if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
+    handleGrass({ animationId: animationId });
+  }
 
   if (keys.w.pressed && lastKey === "w") {
     player.moving = true;
     playerImage.src = "./img/playerUp.png";
 
-    handleCollision({
-      offset: {
-        x: 0,
-        y: 2,
-      },
-    });
+    handleCollision({ offset: { x: 0, y: 2 } });
     if (moving) {
       movables.forEach((movable) => {
         movable.position.y += 2;
@@ -117,6 +117,7 @@ function animate() {
   } else if (keys.a.pressed && lastKey === "a") {
     player.moving = true;
     playerImage.src = "./img/playerLeft.png";
+    // handleCollision({ offset: { x: 2, y: 0 } });
 
     handleCollision({
       offset: {
@@ -133,12 +134,14 @@ function animate() {
     player.moving = true;
     playerImage.src = "./img/playerDown.png";
 
-    handleCollision({
-      offset: {
-        x: 0,
-        y: -2,
-      },
-    });
+    handleCollision({ offset: { x: 0, y: -2 } });
+
+    // handleCollision({
+    //   offset: {
+    //     x: 0,
+    //     y: -2,
+    //   },
+    // });
     if (moving) {
       movables.forEach((movable) => {
         movable.position.y -= 2;
@@ -148,12 +151,14 @@ function animate() {
     player.moving = true;
     playerImage.src = "./img/playerRight.png";
 
-    handleCollision({
-      offset: {
-        x: -2,
-        y: 0,
-      },
-    });
+    handleCollision({ offset: { x: -2, y: 0 } });
+
+    // handleCollision({
+    //   offset: {
+    //     x: -2,
+    //     y: 0,
+    //   },
+    // });
 
     if (moving) {
       movables.forEach((movable) => {
