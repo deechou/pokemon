@@ -15,9 +15,9 @@ class Boundary {
 class Sprite {
   constructor({
     position,
-    velocity,
     image,
     frames = { max: 1, current: 0, elapsed: 0 },
+    animated,
   }) {
     this.position = position;
     this.image = image;
@@ -27,7 +27,7 @@ class Sprite {
       this.height = this.image.height;
     };
 
-    this.moving = false;
+    this.animated = animated;
   }
 
   draw() {
@@ -43,7 +43,7 @@ class Sprite {
       this.height
     );
 
-    if (!this.moving) return;
+    if (!this.animated) return;
 
     if (this.frames.max > 1) {
       this.frames.elapsed++;

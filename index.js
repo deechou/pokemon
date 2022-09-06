@@ -59,6 +59,42 @@ const player = new Sprite({
   },
 });
 
+const battleBackground = new Sprite({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  image: battleBG,
+});
+
+const draggle = new Sprite({
+  position: {
+    x: 800,
+    y: 100,
+  },
+  image: draggleImage,
+  frames: {
+    max: 4,
+    current: 0,
+    elapsed: 0,
+  },
+  animated: true,
+});
+
+const emby = new Sprite({
+  position: {
+    x: 280,
+    y: 325,
+  },
+  image: embyImage,
+  frames: {
+    max: 4,
+    current: 0,
+    elapsed: 0,
+  },
+  animated: true,
+});
+
 const playerHitBox = new HitBox({
   position: {
     x: player.position.x,
@@ -96,7 +132,7 @@ function animate() {
   player.draw();
   foreground.draw();
 
-  player.moving = false;
+  player.animated = false;
 
   if (battle.initiated) return;
 
@@ -105,7 +141,7 @@ function animate() {
   }
 
   if (keys.w.pressed && lastKey === "w") {
-    player.moving = true;
+    player.animated = true;
     playerImage.src = "./img/playerUp.png";
 
     handleCollision({ offset: { x: 0, y: 2 } });
@@ -115,7 +151,7 @@ function animate() {
       });
     }
   } else if (keys.a.pressed && lastKey === "a") {
-    player.moving = true;
+    player.animated = true;
     playerImage.src = "./img/playerLeft.png";
     // handleCollision({ offset: { x: 2, y: 0 } });
 
@@ -131,7 +167,7 @@ function animate() {
       });
     }
   } else if (keys.s.pressed && lastKey === "s") {
-    player.moving = true;
+    player.animated = true;
     playerImage.src = "./img/playerDown.png";
 
     handleCollision({ offset: { x: 0, y: -2 } });
@@ -148,7 +184,7 @@ function animate() {
       });
     }
   } else if (keys.d.pressed && lastKey === "d") {
-    player.moving = true;
+    player.animated = true;
     playerImage.src = "./img/playerRight.png";
 
     handleCollision({ offset: { x: -2, y: 0 } });
@@ -166,6 +202,13 @@ function animate() {
       });
     }
   }
+}
+
+function animateBattle() {
+  window.requestAnimationFrame(animateBattle);
+  battleBackground.draw();
+  draggle.draw();
+  emby.draw();
 }
 
 const keys = {
@@ -222,4 +265,5 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
-animate();
+// animate();
+animateBattle();

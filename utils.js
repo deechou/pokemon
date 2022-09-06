@@ -86,6 +86,13 @@ function flashScreen() {
       gsap.to("#overlappingDiv", {
         opacity: 1,
         duration: 0.3,
+        onComplete() {
+          animateBattle();
+          gsap.to("#overlappingDiv", {
+            opacity: 0,
+            duration: 0.3,
+          });
+        },
       });
     },
   });

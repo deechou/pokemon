@@ -1,9 +1,32 @@
 <!DOCTYPE html>
-<style>
-  body {
-    background-color: black;
-  }
-</style>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * {
+      font-family: "Press Start 2P", cursive;
+    }
+    body {
+      background-color: black;
+    }
+    h1 {
+      margin: 0;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ccc;
+    }
+  </style>
+</head>
 
 <div style="display: inline-block; position: relative">
   <div
@@ -20,6 +43,48 @@
     "
   ></div>
   <canvas></canvas>
+
+  <div
+    id="attackBar"
+    style="
+      background-color: white;
+      height: 140px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-top: 4px black solid;
+      border-right: 4px black solid;
+      display: flex;
+    "
+  >
+    <div
+      id="options"
+      style="
+        width: 66.66%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      "
+    >
+      <button>Option1</button>
+      <button>Option2</button>
+      <button>Option3</button>
+      <button>Option4</button>
+    </div>
+
+    <div
+      id="optionTypes"
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 33.34%;
+        border-left: 4px black solid;
+      "
+    >
+      Option
+    </div>
+  </div>
 </div>
 
 <script
