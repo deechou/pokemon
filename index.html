@@ -42,6 +42,76 @@
       pointer-events: none;
     "
   ></div>
+
+  <!-- Enemy HP Bar -->
+  <div
+    style="
+      position: absolute;
+      background-color: white;
+      width: 250px;
+      top: 50px;
+      left: 50px;
+      border: 4px black solid;
+      padding: 12px;
+    "
+  >
+    <h1 style="font-size: 16px">Draggle HP BAR</h1>
+    <div style="position: relative">
+      <div
+        style="
+          height: 5px;
+          width: 100%;
+          background-color: #ccc;
+          margin-top: 5px;
+        "
+      ></div>
+      <div
+        style="
+          height: 5px;
+          background-color: green;
+          position: absolute;
+          top: 0px;
+          left: 0;
+          right: 0;
+        "
+      ></div>
+    </div>
+  </div>
+
+  <!-- Player HP Bar -->
+  <div
+    style="
+      position: absolute;
+      background-color: white;
+      width: 250px;
+      bottom: 200px;
+      right: 50px;
+      border: 4px black solid;
+      padding: 12px;
+    "
+  >
+    <h1 style="font-size: 16px">Emby HP BAR</h1>
+    <div style="position: relative">
+      <div
+        style="
+          height: 5px;
+          width: 100%;
+          background-color: #ccc;
+          margin-top: 5px;
+        "
+      ></div>
+      <div
+        style="
+          height: 5px;
+          background-color: green;
+          position: absolute;
+          top: 0px;
+          left: 0;
+          right: 0;
+        "
+      ></div>
+    </div>
+  </div>
   <canvas></canvas>
 
   <div
@@ -66,7 +136,7 @@
         grid-template-columns: repeat(2, 1fr);
       "
     >
-      <button>Option1</button>
+      <button>Tackle</button>
       <button>Option2</button>
       <button>Option3</button>
       <button>Option4</button>

@@ -172,12 +172,6 @@ function animate() {
 
     handleCollision({ offset: { x: 0, y: -2 } });
 
-    // handleCollision({
-    //   offset: {
-    //     x: 0,
-    //     y: -2,
-    //   },
-    // });
     if (moving) {
       movables.forEach((movable) => {
         movable.position.y -= 2;
@@ -189,13 +183,6 @@ function animate() {
 
     handleCollision({ offset: { x: -2, y: 0 } });
 
-    // handleCollision({
-    //   offset: {
-    //     x: -2,
-    //     y: 0,
-    //   },
-    // });
-
     if (moving) {
       movables.forEach((movable) => {
         movable.position.x -= 2;
@@ -203,6 +190,10 @@ function animate() {
     }
   }
 }
+
+addEventListener("click", () => {
+  console.log("clicked");
+});
 
 function animateBattle() {
   window.requestAnimationFrame(animateBattle);
@@ -265,5 +256,5 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
-// animate();
-animateBattle();
+animate();
+// animateBattle();
